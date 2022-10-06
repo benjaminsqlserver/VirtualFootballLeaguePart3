@@ -1,0 +1,68 @@
+﻿@page "/season-fixtures"
+@layout MainLayout
+@inherits VirtualLeague.Pages.SeasonFixturesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using VirtualLeague.Models.ConData
+@using Microsoft.AspNetCore.Identity;
+@using VirtualLeague.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>Season Fixtures</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Season Fixtures">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton style="margin-bottom: 10px" Text="Generate Season Fixtures" Click="@Button1Click">
+        </RadzenButton>
+        <RadzenSplitButton Icon="get_app" style="margin-bottom: 10px; margin-left: 10px" Text="Export" Click="@Splitbutton0Click">
+          <ChildContent>
+            <RadzenSplitButtonItem Text="Excel" Value="xlsx">
+            </RadzenSplitButtonItem>
+            <RadzenSplitButtonItem Text="CSV" Value="csv">
+            </RadzenSplitButtonItem>
+          </ChildContent>
+        </RadzenSplitButton>
+        <RadzenTextBox Placeholder="Search ..." style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await grid0.GoToPage(0);await grid0.Reload();})">
+        </RadzenTextBox>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Count="@getSeasonFixturesCount" Data="@getSeasonFixturesResult" FilterMode="Radzen.FilterMode.Advanced" TItem="VirtualLeague.Models.ConData.SeasonFixture" LoadData="@Grid0LoadData">
+          <Columns>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" Property="FixtureID" Title="Fixture ID">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" FilterProperty="LeagueSeason.SeasonName" GroupProperty="LeagueSeason.SeasonName" Property="SeasonID" SortProperty="LeagueSeason.SeasonName" Title="League Season">
+              <Template Context="data">
+              @(data.LeagueSeason?.SeasonName)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" FilterProperty="MatchDay.MatchDayName" GroupProperty="MatchDay.MatchDayName" Property="MatchDayID" SortProperty="MatchDay.MatchDayName" Title="Match Day">
+              <Template Context="data">
+              @(data.MatchDay?.MatchDayName)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" FilterProperty="Team.TeamName" GroupProperty="Team.TeamName" Property="HomeTeamID" SortProperty="Team.TeamName" Title="Team">
+              <Template Context="data">
+              @(data.Team?.TeamName)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" FilterProperty="Team1.TeamName" GroupProperty="Team1.TeamName" Property="AwayTeamID" SortProperty="Team1.TeamName" Title="Team">
+              <Template Context="data">
+              @(data.Team1?.TeamName)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" Property="Played" Title="Played">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="VirtualLeague.Models.ConData.SeasonFixture" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="virtualLeagueModelsConDataSeasonFixture">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, virtualLeagueModelsConDataSeasonFixture))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

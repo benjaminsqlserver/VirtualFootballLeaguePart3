@@ -1,0 +1,27 @@
+﻿@page "/login"
+@layout LoginLayout
+@inherits VirtualLeague.Pages.LoginComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using VirtualLeague.Models.ConData
+@using Microsoft.AspNetCore.Identity;
+@using VirtualLeague.Models
+@using Microsoft.AspNetCore.Authorization
+<PageTitle>Login</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Login">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
+          <ChildContent>
+            <RadzenLogin AllowResetPassword="false" Register="@Login0Register">
+            </RadzenLogin>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>
